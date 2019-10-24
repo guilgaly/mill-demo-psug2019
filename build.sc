@@ -47,7 +47,7 @@ object cowsay extends Module {
       versionControl = VersionControl.github("guilgaly", "mill-demo-scalaio2019"),
       developers = Seq(Developer("guilgaly", "Guillaume Galy", "https://github.com/guilgaly"))
     )
-    override def publishVersion = "0.0.1-SNAPSHOT"
+    override def publishVersion = "0.0.1"
     override def artifactName = "cowsay-mill-demo"
 
     def cowfiles = T.sources(millSourcePath / "cowfiles")
