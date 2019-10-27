@@ -13,3 +13,8 @@ object cowsay extends ScalaModule with ScalafmtModule {
     override def ivyDeps = Agg(ivy"org.scalatest::scalatest:3.0.8")
   }
 }
+
+object cowsaycli extends ScalaModule with ScalafmtModule {
+  override def scalaVersion = "2.13.1"
+  override def moduleDeps = Seq(cowsay)
+}
