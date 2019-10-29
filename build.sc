@@ -29,18 +29,20 @@ object cowsay extends Module {
     override def platformSegment = "js"
     override def scalaJSVersion = "0.6.29"
 
-    object test extends CowsayTestModule
+    object test extends CowsayTestModule with TestScalaJSModule {
+      override def scalaJSVersion = "0.6.29"
+    }
   }
 
 
   trait CowsayModule extends CrossScalaModule with CommonModule { outer =>
-    override def ivyDeps = Agg(ivy"com.beachape::enumeratum:1.5.13")
+    override def ivyDeps = Agg(ivy"com.beachape::enumeratum::1.5.13")
     override def millSourcePath = cowsay.millSourcePath
 
     trait CowsayTestModule extends Tests with CommonModule {
       override def platformSegment = outer.platformSegment
       override def testFrameworks = Seq("org.scalatest.tools.Framework")
-      override def ivyDeps = Agg(ivy"org.scalatest::scalatest:3.0.8")
+      override def ivyDeps = Agg(ivy"org.scalatest::scalatest::3.0.8")
     }
   }
 }
