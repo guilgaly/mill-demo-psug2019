@@ -35,10 +35,20 @@ object cowsay extends Module {
     }
   }
 
-
-  trait CowsayModule extends CrossScalaModule with CommonModule { outer =>
+  trait CowsayModule extends CrossScalaModule with CommonModule with PublishModule { outer =>
     override def ivyDeps = Agg(ivy"com.beachape::enumeratum::1.5.13")
     override def millSourcePath = cowsay.millSourcePath
+
+    override def pomSettings = PomSettings(
+      description = "Cowsay library (mill demo)",
+      organization = "fr.ggaly",
+      url = "https://github.com/guilgaly/mill-demo-scalaio2019",
+      licenses = Seq(License.MIT),
+      versionControl = VersionControl.github("guilgaly", "mill-demo-scalaio2019"),
+      developers = Seq(Developer("guilgaly", "Guillaume Galy", "https://github.com/guilgaly"))
+    )
+    override def publishVersion = "0.0.1-SNAPSHOT"
+    override def artifactName = "cowsay-mill-demo"
 
     def cowfiles = T.sources(millSourcePath / "cowfiles")
 
