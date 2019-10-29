@@ -5,6 +5,7 @@ import mill.scalalib.scalafmt.ScalafmtModule
 import mill.scalajslib._
 
 import $file.settings
+import $file.cowgen
 
 trait CommonModule extends ScalaModule with ScalafmtModule {
   def platformSegment: String // jvm or js
@@ -38,6 +39,24 @@ object cowsay extends Module {
   trait CowsayModule extends CrossScalaModule with CommonModule { outer =>
     override def ivyDeps = Agg(ivy"com.beachape::enumeratum::1.5.13")
     override def millSourcePath = cowsay.millSourcePath
+
+    def cowfiles = T.sources(millSourcePath / "cowfiles")
+
+    def allCowFiles = T {
+      def isHiddenFile(path: os.Path) = path.last.startsWith(".")
+      for {
+        root <- cowfiles()
+        path <- os.walk(root.path)
+        if os.isFile(path) && path.last.endsWith(".cow") && !isHiddenFile(path)
+      } yield PathRef(path)
+    }
+
+    override def generatedSources = T {
+      val files = allCowFiles().map(_.path)
+      val outputDir = T.ctx().dest
+      cowgen.generateDefaultCows(outputDir, files)
+      Seq(PathRef(outputDir))
+    }
 
     trait CowsayTestModule extends Tests with CommonModule {
       override def platformSegment = outer.platformSegment
